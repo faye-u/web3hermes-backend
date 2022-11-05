@@ -1,6 +1,6 @@
 import * as functions from "firebase-functions";
 // import * as PushAPI from "@pushprotocol/restapi";
-import {createSocketConnection, EVENTS} from '@pushprotocol/socket';
+import {createSocketConnection, EVENTS} from "@pushprotocol/socket";
 
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
@@ -8,6 +8,7 @@ import {createSocketConnection, EVENTS} from '@pushprotocol/socket';
 export const helloWorld = functions.https.onRequest((request, response) => {
   functions.logger.info("Hello logs!", {structuredData: true});
   response.send("Hello from Firebase!");
+  addSocketEvents();
 });
 
 /*
@@ -35,28 +36,28 @@ result = await PushAPI.channels.subscribe({
 
 
 const connectionObject = createSocketConnection({
-  user: 'eip155:1:0x350bF1b724ce1eFFAb57959Bae9cEf657882ddF9',
-  env: 'prod',
-  socketOptions: { autoConnect: true }
+  user: "eip155:1:0x350bF1b724ce1eFFAb57959Bae9cEf657882ddF9",
+  env: "prod",
+  socketOptions: {autoConnect: true},
 });
-let sdkSocket = connectionObject;
-let isConnected = sdkSocket?.connected;
-let pushMessage = "";
+const sdkSocket = connectionObject;
+// let isConnected = sdkSocket?.connected;
+// let pushMessage = "";
 
 const addSocketEvents = () => {
   sdkSocket?.on(EVENTS.CONNECT, () => {
-    isConnected = true;
-  })
+    // isConnected = true;
+  });
 
   sdkSocket?.on(EVENTS.DISCONNECT, () => {
-    isConnected = false;
-  })
+    // isConnected = false;
+  });
 
   sdkSocket?.on(EVENTS.USER_FEEDS, (feedItem) => {
     /**
      * "feedItem" is the latest notification received
      */
     console.log(feedItem);
-    pushMessage = feedItem.payload;
-  })
+    // pushMessage = feedItem.payload;
+  });
 };
